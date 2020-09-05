@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.springboot06.dao.InfoDao">
+    <resultMap id="infoMap" type="com.aaa.springboot06.entiy.Pinfo" autoMapping="true">
+        <id property="pid" column="pid"></id>
+        <collection property="ainfo" javaType="com.aaa.springboot06.entiy.Ainfo" autoMapping="true">
+            <id property="aid" column="aid"></id>
+        </collection>
+    </resultMap>
+    <select id="listAll" resultMap="infoMap">
+select * from p_info p inner JOIN a_info a on p.paid=a.aid
+where p.pid like '%${txt}%'  or p.pname like '%${txt}%' or p.page like '%${txt}%' or p.paddress like '%${txt}%'
+    or a.aname like '%${txt}%'
+    </select>
+    <insert id="add" parameterType="com.aaa.springboot06.entiy.Pinfo">
+        insert into p_info(pname,paid,page,paddress) values(#{pname},#{ainfo.aid},#{page},#{paddress})
+    </insert>
+
+    <select id="selectId" resultMap="infoMap">
+   select * from p_info p inner JOIN a_info a on p.paid=a.aid
+   where p.pid=#{pid}
+    </select>
+    <update id="upd">
+        update p_info set pname=#{pname},paid=#{ainfo.aid},page=#{page},paddress=#{paddress}
+        where pid=#{pid}
+    </update>
+    <delete id="delete">
+        delete from p_info where pid=#{pid}
+    </delete>
+</mapper>
